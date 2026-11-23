@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Кошонаи Бахт — Анкета</title>
+  <style>
+    :root {
+      --primary: #7c1d3e; --primary-light: #a12953; --bg: #f8f4f5; --card: #ffffff;
+      --text: #222222; --muted: #6b6b6b; --border: #e0d6d9;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body, .card, input, select, textarea { color-scheme: light !important; }
+    body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 40px; }
+    .header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; padding: 16px; display: flex; align-items: center; justify-content: space-between; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; box-shadow: 0 4px 12px rgba(124, 29, 62, 0.2); margin-bottom: 16px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .logo-box { width: 44px; height: 44px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--primary); font-weight: bold; flex-shrink: 0; }
+    .brand-title h1 { margin: 0; font-size: 18px; }
+    .brand-title p { margin: 2px 0 0; font-size: 12px; opacity: 0.9; }
+    .container { max-width: 600px; margin: 0 auto; padding: 0 16px; }
+    .card { background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid var(--border); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .card-header h2 { margin: 0; font-size: 16px; color: var(--primary); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 400px) { .grid-2 { grid-template-columns: 1fr; } }
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #333; }
+    input[type="text"], input[type="number"], input[type="tel"], input[type="url"], select, textarea {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; background: #fff !important; color: #222 !important; outline: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+    textarea { resize: vertical; min-height: 75px; }
+    input[type="file"] { width: 100%; padding: 8px; border: 1px dashed var(--border); border-radius: 10px; background: #fff; font-size: 13px; }
+    input[type="file"]::file-selector-button { padding: 8px 12px; border: none; border-radius: 6px; background: var(--primary); color: #fff; font-weight: 600; cursor: pointer; margin-right: 10px; }
+    .phone-row { display: flex; gap: 8px; }
+    .phone-code { width: 108px !important; flex-shrink: 0; }
+    .btn { padding: 10px 16px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s; }
+    .btn:active { transform: scale(0.98); }
+    .btn-success { background: #1e824c; color: #fff; width: 100%; padding: 14px; font-size: 16px; box-shadow: 0 4px 12px rgba(30, 130, 76, 0.25); }
+    .btn-outline { background: #fff; border: 1px solid var(--border); color: var(--text); padding: 6px 12px; font-size: 12px; }
+    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: #222; color: #fff; padding: 12px 20px; border-radius: 24px; font-size: 14px; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 1200; opacity: 0; transition: all 0.25s ease; white-space: nowrap; }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .full-width { grid-column: 1 / -1; }
+    .consent-block { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 20px; padding: 0 4px; }
+    .consent-block input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; cursor: pointer; accent-color: var(--primary); flex-shrink: 0; }
+    .consent-block label { font-weight: 400; font-size: 12px; color: var(--muted); line-height: 1.4; margin: 0; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <div class="logo-box">🏠</div>
+      <div class="brand-title">
+        <h1>Кошонаи Бахт</h1>
+        <p>Барои сохтани анкета маълумотро пур кунед</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <form id="clientForm" onsubmit="return false;">
+      
+      <div class="card">
+        <div class="card-header">
+          <h2>1. Маълумот дар бораи шумо</h2>
+          <button type="button" class="btn btn-outline" onclick="resetClientForm()">Аз нав</button>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Ҷинс *</label>
+            <select id="gender" required onchange="updateVisibility()">
+              <option value="Зан">Зан</option>
+              <option value="Духтар">Духтар</option>
+              <option value="Мард">Мард</option>
+              <option value="Ҷавон">Ҷавон</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Синну сол (сола) *</label>
+            <input type="number" id="age" min="18" max="90" placeholder="Масалан: 25" required />
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Номи шумо *</label>
+            <input type="text" id="internalName" placeholder="Масалан: Рустам ё Мадина" required />
+          </div>
+          <div class="form-group">
+            <label>Ҷои истиқомат *</label>
+            <input type="text" id="location" placeholder="Масалан: ш. Душанбе ё н. Ҳисор" required />
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Қад (см) *</label>
+            <input type="number" id="height" placeholder="Масалан: 170" required />
+          </div>
+          <div class="form-group">
+            <label>Вазн (кг) *</label>
+            <input type="number" id="weight" placeholder="Масалан: 65" required />
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Маълумот *</label>
+            <select id="education" required>
+              <option value="Миёна">Миёна</option>
+              <option value="Миёнаи махсус">Миёнаи махсус</option>
+              <option value="Олӣ">Олӣ</option>
+              <option value="Олии нопурра">Олии нопурра</option>
+              <option value="Донишҷӯ">Донишҷӯ</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Касбу кор *</label>
+            <input type="text" id="job" placeholder="Масалан: Муаллим, духтур, соҳибкор..." required />
+          </div>
+        </div>
+
+        <div class="grid-2" id="maritalChildrenRow">
+          <div class="form-group" id="maritalStatusGroup">
+            <label>Ҳолати оилавӣ *</label>
+            <select id="maritalStatus" required></select>
+          </div>
+          <div class="form-group" id="childrenCountGroup">
+            <label>Чанд фарзанд доред? *</label>
+            <select id="childrenCount" required onchange="updateVisibility()">
+              <option value="Надорам">Надорам</option>
+              <option value="1 фарзанд">1 фарзанд</option>
+              <option value="2 фарзанд">2 фарзанд</option>
+              <option value="3 фарзанд">3 фарзанд</option>
+              <option value="4 фарзанд">4 фарзанд</option>
+              <option value="5 фарзанд">5 фарзанд</option>
+              <option value="Аз 5 зиёд">Аз 5 зиёд</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" id="childrenWithGroup">
+          <label>Фарзандон бо кӣ зиндагӣ мекунанд? *</label>
+          <input type="text" id="childrenWith" placeholder="Масалан: Бо худам ё бо модарашон" />
+        </div>
+
+        <div class="form-group">
+          <label>Манзили зист *</label>
+          <select id="housing" required onchange="updateVisibility()">
+            <option value="Ҳавлӣ">Ҳавлӣ</option>
+            <option value="Хона дар бинои баландошёна">Хона дар бинои баландошёна</option>
+            <option value="Бо волидон (хонаи волидон)">Бо волидон (хонаи волидон)</option>
+            <option value="Иҷоранишин">Иҷоранишин</option>
+            <option value="Дигар">Дигар</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="livingWithGroup">
+          <label>Дар манзили зист бо кӣ зиндагӣ мекунед? *</label>
+          <input type="text" id="livingWith" placeholder="Масалан: Танҳо ё бо падару модар" />
+        </div>
+
+        <div class="form-group">
+          <label>Маълумоти иловагӣ *</label>
+          <textarea id="extraInfo" placeholder="Масалан: Дар бораи худ ва чӣ гуна ҳамсар меҷӯед нависед..." required></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>🔒 Тамосҳои шахсӣ ва Сурат</h2>
+        </div>
+
+        <div class="form-group">
+          <label>Ба соҳиби анкетаи рақами чанд пешниҳоди издивоҷ фиристонаед? *</label>
+          <input type="number" id="profileNumber" min="1" placeholder="Масалан: 125" required />
+          <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 4px;">Лутфан рақами анкетаеро, ки ба шумо писанд омад, нависед.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Сурати шумо (Фото) *</label>
+          <input type="file" id="photo" accept="image/*" required />
+          <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 4px;">💡 Баъд аз кушодани Gmail, ин суратро дастӣ (бо скрепка) замима кунед.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Телефон *</label>
+          <div class="phone-row">
+            <select id="phoneCode" class="phone-code">
+              <option value="+992">🇹🇯 +992</option><option value="+7">🇷🇺 +7</option><option value="+998">🇺🇿 +998</option><option value="+996">🇰🇬 +996</option><option value="+993">🇹🇲 +993</option><option value="+1">🇺🇸 +1</option><option value="+44">🇬🇧 +44</option>
+            </select>
+            <input type="tel" inputmode="numeric" id="phone" class="phone-format" placeholder="918 61 61 61" maxlength="12" oninput="this.value = this.value.replace(/[^0-9\s]/g, '')" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>WhatsApp</label>
+          <div class="phone-row">
+            <select id="whatsappCode" class="phone-code">
+              <option value="+992">🇹🇯 +992</option><option value="+7">🇷🇺 +7</option><option value="+998">🇺🇿 +998</option><option value="+996">🇰🇬 +996</option><option value="+993">🇹🇲 +993</option><option value="+1">🇺🇸 +1</option><option value="+44">🇬🇧 +44</option>
+            </select>
+            <input type="tel" inputmode="numeric" id="whatsapp" class="phone-format" placeholder="918 61 61 61" maxlength="12" oninput="this.value = this.value.replace(/[^0-9\s]/g, '')" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Telegram</label>
+          <div class="phone-row">
+            <select id="telegramCode" class="phone-code">
+              <option value="+992">🇹🇯 +992</option><option value="+7">🇷🇺 +7</option><option value="+998">🇺🇿 +998</option><option value="+996">🇰🇬 +996</option><option value="+993">🇹🇲 +993</option><option value="+1">🇺🇸 +1</option><option value="+44">🇬🇧 +44</option>
+            </select>
+            <input type="tel" inputmode="numeric" id="telegram" class="phone-format" placeholder="918 61 61 61" maxlength="12" oninput="this.value = this.value.replace(/[^0-9\s]/g, '')" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>IMO</label>
+          <div class="phone-row">
+            <select id="imoCode" class="phone-code">
+              <option value="+992">🇹🇯 +992</option><option value="+7">🇷🇺 +7</option><option value="+998">🇺🇿 +998</option><option value="+996">🇰🇬 +996</option><option value="+993">🇹🇲 +993</option><option value="+1">🇺🇸 +1</option><option value="+44">🇬🇧 +44</option>
+            </select>
+            <input type="tel" inputmode="numeric" id="imo" class="phone-format" placeholder="918 61 61 61" maxlength="12" oninput="this.value = this.value.replace(/[^0-9\s]/g, '')" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Facebook (пайванди профил) *</label>
+          <input type="url" id="facebook" placeholder="https://www.facebook.com/профил" required />
+        </div>
+      </div>
+
+      <div class="consent-block">
+        <input type="checkbox" id="consent" required />
+        <label for="consent">
+          Ман медонам, ки ин маълумот ба шахси сеюм фиристода мешавад ва оқибатҳои онро ба ӯҳдаи худ мегирам. Розигии ман ба гузоштани галочка тасдиқ карда шуд. * <br>
+          <span style="font-size: 11px;">(Я знаю, что эта информация будет отправлена третьему лицу, и беру на себя ответственность за последствия. Мое согласие подтверждается установкой галочки.)</span>
+        </label>
+      </div>
+
+      <button type="button" class="btn btn-success" onclick="sendAnketaToEmail()">
+        📨 Фиристодан
+      </button>
+    </form>
+  </div>
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // =====================================================================
+    // ЗАШИФРОВАННЫЙ СПИСОК 30 ПОЧТ (Base64). 
+    // Соискатель увидит только этот набор букв, а не сами адреса!
+    // =====================================================================
+    const ENCRYPTED_EMAILS = {
+      1: "a29zaG9uYWkuYmFraHQuMDFAZ21haWwuY29t",
+      2: "a29zaG9uYWkuYmFraHQuMDJAZ21haWwuY29t",
+      3: "a29zaG9uYWkuYmFraHQuMDNAZ21haWwuY29t",
+      4: "a29zaG9uYWkuYmFraHQuMDRAZ21haWwuY29t",
+      5: "a29zaG9uYWkuYmFraHQuMDVAZ21haWwuY29t",
+      6: "a29zaG9uYWkuYmFraHQuMDZAZ21haWwuY29t",
+      7: "a29zaG9uYWkuYmFraHQuMDdAZ21haWwuY29t",
+      8: "a29zaG9uYWkuYmFraHQuMDhAZ21haWwuY29t",
+      9: "a29zaG9uYWkuYmFraHQuMDlAZ21haWwuY29t",
+      10: "a29zaG9uYWkuYmFraHQuMTBAZ21haWwuY29t",
+      11: "a29zaG9uYWkuYmFraHQuMTFAZ21haWwuY29t",
+      12: "a29zaG9uYWkuYmFraHQuMTJAZ21haWwuY29t",
+      13: "a29zaG9uYWkuYmFraHQuMTNAZ21haWwuY29t",
+      14: "a29zaG9uYWkuYmFraHQuMTRAZ21haWwuY29t",
+      15: "a29zaG9uYWkuYmFraHQuMTVAZ21haWwuY29t",
+      16: "a29zaG9uYWkuYmFraHQuMTZAZ21haWwuY29t",
+      17: "a29zaG9uYWkuYmFraHQuMTdAZ21haWwuY29t",
+      18: "a29zaG9uYWkuYmFraHQuMThAZ21haWwuY29t",
+      19: "a29zaG9uYWkuYmFraHQuMTlAZ21haWwuY29t",
+      20: "a29zaG9uYWkuYmFraHQuMjBAZ21haWwuY29t",
+      21: "a29zaG9uYWkuYmFraHQuMjFAZ21haWwuY29t",
+      22: "a29zaG9uYWkuYmFraHQuMjJAZ21haWwuY29t",
+      23: "a29zaG9uYWkuYmFraHQuMjNAZ21haWwuY29t",
+      24: "a29zaG9uYWkuYmFraHQuMjRAZ21haWwuY29t",
+      25: "a29zaG9uYWkuYmFraHQuMjVAZ21haWwuY29t",
+      26: "a29zaG9uYWkuYmFraHQuMjZAZ21haWwuY29t",
+      27: "a29zaG9uYWkuYmFraHQuMjdAZ21haWwuY29t",
+      28: "a29zaG9uYWkuYmFraHQuMjhAZ21haWwuY29t",
+      29: "a29zaG9uYWkuYmFraHQuMjlAZ21haWwuY29t",
+      30: "a29zaG9uYWkuYmFraHQuMzBAZ21haWwuY29t"
+    };
+    
+    // Функция автоматической расшифровки
+    function decryptEmail(encodedStr) {
+        try {
+            return atob(encodedStr);
+        } catch (e) {
+            return "vasha_pochta@mail.com"; 
+        }
+    }
+    // =====================================================================
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    function formatTajikPhone(value) {
+      let digits = value.replace(/\D/g, '');
+      if (digits.startsWith('992') && digits.length > 9) digits = digits.slice(3);
+      digits = digits.slice(0, 9);
+      let parts = [];
+      if (digits.length > 0) parts.push(digits.slice(0, 3));
+      if (digits.length > 3) parts.push(digits.slice(3, 5));
+      if (digits.length > 5) parts.push(digits.slice(5, 7));
+      if (digits.length > 7) parts.push(digits.slice(7, 9));
+      return parts.join(' ');
+    }
+
+    document.querySelectorAll('.phone-format').forEach(input => {
+      input.addEventListener('input', function() {
+        this.value = formatTajikPhone(this.value);
+      });
+    });
+
+    function updateVisibility() {
+      const gender = document.getElementById('gender').value;
+      const isNeverMarried = (gender === 'Духтар' || gender === 'Ҷавон');
+
+      const maritalStatusSelect = document.getElementById('maritalStatus');
+      const maritalStatusGroup = document.getElementById('maritalStatusGroup');
+      const childrenCountGroup = document.getElementById('childrenCountGroup');
+      const childrenCountSelect = document.getElementById('childrenCount');
+      const childrenWithGroup = document.getElementById('childrenWithGroup');
+
+      if (isNeverMarried) {
+        maritalStatusSelect.innerHTML = '<option value="Муҷаррад">Муҷаррад</option>';
+        childrenCountGroup.style.display = 'none';
+        childrenCountSelect.value = 'Надорам';
+        childrenWithGroup.style.display = 'none';
+        document.getElementById('childrenWith').value = '';
+        maritalStatusGroup.classList.add('full-width');
+      } else {
+        maritalStatusSelect.innerHTML = `
+          <option value="Ҷудошуда">Ҷудошуда</option>
+          <option value="Оиладор">Оиладор</option>
+        `;
+        childrenCountGroup.style.display = 'block';
+        maritalStatusGroup.classList.remove('full-width');
+
+        if (childrenCountSelect.value === 'Надорам') {
+          childrenWithGroup.style.display = 'none';
+          document.getElementById('childrenWith').value = '';
+        } else {
+          childrenWithGroup.style.display = 'block';
+        }
+      }
+
+      const housing = document.getElementById('housing').value;
+      const livingWithGroup = document.getElementById('livingWithGroup');
+      if (housing === 'Бо волидон (хонаи волидон)') {
+        livingWithGroup.style.display = 'none';
+        document.getElementById('livingWith').value = '';
+      } else {
+        livingWithGroup.style.display = 'block';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => { updateVisibility(); });
+
+    function resetClientForm() {
+      document.getElementById('clientForm').reset();
+      updateVisibility();
+    }
+
+    function cleanEndDot(str) { return str.replace(/\.+$/, '').trim(); }
+    function lowerFirst(str) { if (!str) return ''; return str.charAt(0).toLowerCase() + str.slice(1); }
+
+    function sendAnketaToEmail() {
+      const gender = document.getElementById('gender').value;
+      const isNeverMarried = (gender === 'Духтар' || gender === 'Ҷавон');
+      const age = document.getElementById('age').value.trim();
+      const internalName = cleanEndDot(document.getElementById('internalName').value.trim());
+      const location = cleanEndDot(document.getElementById('location').value.trim());
+      const height = document.getElementById('height').value.trim();
+      const weight = document.getElementById('weight').value.trim();
+      const education = document.getElementById('education').value;
+      const job = cleanEndDot(document.getElementById('job').value.trim());
+      const maritalStatus = isNeverMarried ? 'Муҷаррад' : document.getElementById('maritalStatus').value;
+      const childrenCount = isNeverMarried ? 'Надорам' : document.getElementById('childrenCount').value;
+      const childrenWith = isNeverMarried ? '' : cleanEndDot(document.getElementById('childrenWith').value.trim());
+      const housing = document.getElementById('housing').value;
+      const livingWith = (housing === 'Бо волидон (хонаи волидон)') ? '' : cleanEndDot(document.getElementById('livingWith').value.trim());
+      let extraInfo = cleanEndDot(document.getElementById('extraInfo').value.trim());
+      
+      const profileNumber = document.getElementById('profileNumber').value.trim();
+      const photoInput = document.getElementById('photo');
+      const phoneRaw = document.getElementById('phone').value.trim();
+      const facebook = document.getElementById('facebook').value.trim();
+      const consent = document.getElementById('consent');
+
+      if (!age) return alert('Лутфан синну солро ворид кунед!');
+      if (!internalName) return alert('Лутфан номи худро ворид кунед!');
+      if (!location) return alert('Лутфан ҷои истиқоматро ворид кунед!');
+      if (!height) return alert('Лутфан қадро (см) ворид кунед!');
+      if (!weight) return alert('Лутфан вазнро (кг) ворид кунед!');
+      if (!job) return alert('Лутфан касбу корро ворид кунед!');
+      if (!isNeverMarried && childrenCount !== 'Надорам' && !childrenWith) {
+        return alert('Лутфан нависед, ки фарзандон бо кӣ зиндагӣ мекунанд!');
+      }
+      if (housing !== 'Бо волидон (хонаи волидон)' && !livingWith) {
+        return alert('Лутфан нависед, ки дар манзили зист бо кӣ зиндагӣ мекунед!');
+      }
+      if (!extraInfo) return alert('Лутфан маълумоти иловагиро ворид кунед!');
+      
+      if (!profileNumber) {
+        return alert('Лутфан рақами анкетаро ворид кунед, ки ба он пешниҳоди издивоҷ мефиристед!');
+      }
+      if (photoInput.files.length === 0) {
+        return alert('Лутфан сурати худро (Фото) интихоб кунед!');
+      }
+      if (!phoneRaw) {
+        return alert('Лутфан рақами телефонро ворид кунед!');
+      }
+      if (!facebook) {
+        return alert('Лутфан пайванди (ссылка) профили Facebook-ро ворид кунед!');
+      }
+      const fbRegex = /^https?:\/\/(www\.|m\.|mbasic\.)?(facebook\.com|fb\.com)\/[^\s/?#]+\/?.*$/i;
+      if (!fbRegex.test(facebook)) {
+        return alert('Лутфан танҳо пайванди дурусти профили Facebook-ро ворид кунед (масалан: https://www.facebook.com/номи.профил)!');
+      }
+      if (!consent.checked) {
+        return alert('Барои фиристодани анкета, шумо бояд қайдҳои дар боло зикршударо тасдиқ кунед!');
+      }
+
+      if (extraInfo.length > 500) extraInfo = extraInfo.substring(0, 500) + '...';
+
+      // =====================================================================
+      // РАСШИФРОВКА ПОЧТЫ В МОМЕНТ ОТПРАВКИ
+      // =====================================================================
+      const urlParams = new URLSearchParams(window.location.search);
+      const clientId = urlParams.get('id');
+      
+      let CLIENT_EMAIL = "vasha_pochta@mail.com"; // запасная
+
+      if (clientId && ENCRYPTED_EMAILS[clientId]) {
+          CLIENT_EMAIL = decryptEmail(ENCRYPTED_EMAILS[clientId]);
+      } else if (urlParams.get('to')) {
+          CLIENT_EMAIL = urlParams.get('to');
+      }
+      // =====================================================================
+
+      const phone = document.getElementById('phoneCode').value + ' ' + phoneRaw;
+      const whatsapp = document.getElementById('whatsapp').value.trim() ? document.getElementById('whatsappCode').value + ' ' + document.getElementById('whatsapp').value.trim() : '';
+      const telegram = document.getElementById('telegram').value.trim() ? document.getElementById('telegramCode').value + ' ' + document.getElementById('telegram').value.trim() : '';
+      const imo = document.getElementById('imo').value.trim() ? document.getElementById('imoCode').value + ' ' + document.getElementById('imo').value.trim() : '';
+
+      let message = `🔔 АНКЕТАИ НАВ (Кошонаи Бахт)\n`;
+      message += `🎯 Ҷавоб ба анкетаи №: ${profileNumber}\n\n`; 
+      
+      message += `${gender}. ${age} сола.\n`;
+      message += `Ном: ${internalName}.\n`;
+      message += `Сокини ${location}.\n`;
+      message += `Қад: ${height} см.\n`;
+      message += `Вазн: ${weight} кг.\n`;
+      message += `Маълумот: ${education}.\n`;
+      message += `Касбу кор: ${job}.\n`;
+      message += `Ҳолати оилавӣ: ${maritalStatus}.\n`;
+
+      if (!isNeverMarried) {
+        if (childrenCount !== 'Надорам') {
+          message += `Соҳиби ${childrenCount}.\n`;
+          message += `Фарзандонам: ${lowerFirst(childrenWith)}.\n`;
+        } else {
+          message += `Фарзанд надорам.\n`;
+        }
+      }
+
+      message += `Манзили зист: ${housing}.\n`;
+      if (livingWith) message += `Дар манзили зист: ${lowerFirst(livingWith)} зиндагӣ мекунам.\n`;
+      message += `Маълумоти иловагӣ: ${extraInfo}.\n\n`;
+
+      message += `📞 ТАМОСҲО:\n`;
+      message += `Тел: ${phone}\n`;
+      if (whatsapp) message += `WhatsApp: ${whatsapp}\n`;
+      if (telegram) message += `Telegram: ${telegram}\n`;
+      if (imo) message += `IMO: ${imo}\n`;
+      message += `Facebook: ${facebook}\n`;
+
+      message += `\n\n⚠️ ДИҚҚАТ! Шумо сурат интихоб кардед. Баъд аз кушодани Gmail, онро бо тугмаи 📎 (скрепка) дастӣ замима кунед!`;
+      message += `\n\n---\nРозигии коркарди маълумот: ҲА (Согласие получено)`;
+
+      const subject = `Новая анкета №${profileNumber} с сайта Кошонаи Бахт`;
+      const encodedSubject = encodeURIComponent(subject);
+      const encodedBody = encodeURIComponent(message);
+      const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${CLIENT_EMAIL}&su=${encodedSubject}&body=${encodedBody}`;
+
+      showToast('📧 Открываем Gmail...');
+      
+      setTimeout(() => {
+        window.open(gmailLink, '_blank');
+        setTimeout(() => {
+          alert('⚠️ ДИҚҚАТ!\nШумо сурат интихоб кардед.\n\nБаъд аз кушодани Gmail, лутфан суратро бо тугмаи 📎 (скрепка) дастӣ замима кунед!');
+        }, 1000);
+      }, 500);
+    }
+  </script>
+</body>
+</html>
